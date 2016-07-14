@@ -1,0 +1,46 @@
+<html>
+<head><title>Reading from an JSON file</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	function makeRequest() {
+		var httpRequest;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			httpRequest=new XMLHttpRequest();
+		}
+		else {// code for IE6, IE5
+			httpRequest=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		httpRequest.onreadystatechange=function() {
+			if (httpRequest.readyState==4 && httpRequest.status==200) {
+				document.getElementById("data").innerHTML=httpRequest.responseText;
+				var textObj=document.getElementById("data");
+				var carObject = eval('('+ httpRequest.responseText+')');
+				var details = "";
+				for(var property in carObject) {
+					if(property == "owner") {
+						details += "owner name: " + carObject[property].name + "</br>";
+					}
+				}
+				textObj.innerHTML = details;
+		    }
+		}
+		httpRequest.open("GET","http://localhost:10587/ajax/car.json",true);
+		httpRequest.send();
+	}
+	//http://localhost/ajax/car.json
+	/*
+	$(document).ready(function () {
+		$.get ("http://localhost/ajax/test.php", {}, function (data) {
+			console.log (data);
+		})
+	});
+	*/
+</script>
+</head>
+<body>
+	<button type="button" onclick="makeRequest()">Request data</button>
+	<div id=data>
+	</div>
+</body>
+</html>
